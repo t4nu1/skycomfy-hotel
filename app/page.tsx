@@ -122,7 +122,7 @@ export default function Home() {
             <SectionWrapper direction="left">
               <div className="relative group rounded-card overflow-hidden shadow-card aspect-[4/3] lg:aspect-[1.1] w-full">
                 <Image
-                  src="https://images.unsplash.com/photo-1585320806297-9794b3e4aaae?w=800"
+                  src="https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=800"
                   alt="Cozy garden pathways at Skycomfy Hotel"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"

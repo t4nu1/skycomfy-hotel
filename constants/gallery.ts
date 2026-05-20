@@ -27,7 +27,7 @@ export const galleryImages: GalleryImage[] = [
   },
   {
     id: 'g4',
-    src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800',
+    src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
     alt: 'Restaurant dining area with elegant table settings',
     category: 'restaurant',
     width: 800,
@@ -67,7 +67,7 @@ export const galleryImages: GalleryImage[] = [
   },
   {
     id: 'g9',
-    src: 'https://images.unsplash.com/photo-1585320806297-9794b3e4aaae?w=800',
+    src: 'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=800',
     alt: 'Hotel garden at dusk with lush greenery',
     category: 'garden',
     width: 800,
