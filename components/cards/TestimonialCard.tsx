@@ -1,25 +1,34 @@
 'use client';
 
-import { useReducedMotion, motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Star } from 'lucide-react';
-import type { Testimonial } from '@/types';
 import { staggerItemVariants } from '@/lib/variants';
+import type { Testimonial } from '@/types';
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
+  index?: number;
 }
 
-export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const variants = shouldReduceMotion ? { hidden: {}, visible: {} } : staggerItemVariants;
+const noop = { hidden: {}, visible: {} };
+
+export default function TestimonialCard({
+  testimonial,
+  index = 0,
+}: TestimonialCardProps) {
+  const reduce = useReducedMotion();
+  const variants = reduce ? noop : staggerItemVariants;
 
   return (
     <motion.article
       variants={variants}
-      className="flex flex-col gap-4 rounded-card border border-border bg-background p-6 shadow-card min-w-[280px] max-w-sm w-full"
-      aria-label={`Testimonial from ${testimonial.guestName}`}
+      custom={index}
+      className="group flex flex-col gap-5 rounded-card bg-surface border border-border p-7 shadow-card
+                 min-w-[300px] max-w-[380px] w-full transition-border duration-300
+                 hover:border-accent/40"
+      aria-label={`Guest testimonial from ${testimonial.guestName}`}
     >
-      {/* Star rating */}
+      {/* Gold star mark */}
       <div className="flex items-center gap-1" aria-label={`${testimonial.rating} out of 5 stars`}>
         {Array.from({ length: 5 }, (_, i) => (
           <Star
@@ -27,28 +36,27 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
             size={16}
             className={
               i < testimonial.rating
-                ? 'fill-accent text-accent'
-                : 'fill-transparent text-border'
+                ? 'fill-accent text-accent transition-transform duration-200 group-hover:scale-110'
+                : 'fill-transparent text-border/60'
             }
             aria-hidden="true"
           />
         ))}
       </div>
 
-      {/* Review text */}
-      <blockquote className="flex-1 font-sans text-base text-foreground leading-relaxed">
-        <span className="text-accent font-serif text-2xl leading-none select-none" aria-hidden="true">
-          &ldquo;
-        </span>
+      {/* Quote */}
+      <blockquote className="flex-1 font-sans text-[0.9375rem] text-foreground/85 leading-relaxed">
+        <span className="font-serif text-2xl text-accent select-none" aria-hidden="true">&ldquo;</span>
         {testimonial.text}
-        <span className="text-accent font-serif text-2xl leading-none select-none" aria-hidden="true">
-          &rdquo;
-        </span>
+        <span className="font-serif text-2xl text-accent select-none" aria-hidden="true">&rdquo;</span>
       </blockquote>
 
+      {/* Gold divider rule */}
+      <div className="h-px w-8 bg-accent/30" aria-hidden="true" />
+
       {/* Guest name */}
-      <footer className="font-sans text-sm font-semibold text-muted">
-        — {testimonial.guestName}
+      <footer className="font-sans text-xs font-semibold text-muted tracking-wide uppercase">
+        &mdash; {testimonial.guestName}
       </footer>
     </motion.article>
   );

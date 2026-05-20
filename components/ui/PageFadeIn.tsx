@@ -8,20 +8,16 @@ interface PageFadeInProps {
   children: React.ReactNode;
 }
 
-/** No-op variants used when the user prefers reduced motion */
-const noopVariants: Variants = {
-  hidden: {},
-  visible: {},
-};
+const noop: Variants = { hidden: {}, visible: {} };
 
 /**
- * Wraps page content in a fade-in animation on mount.
- * Uses `pageFadeVariants` (opacity 0 → 1, 0.4 s) and respects
- * `prefers-reduced-motion` by collapsing to no-op variants.
+ * PageFadeIn
+ * Wraps children in a gentle page-enter fade animation.
+ * Respects prefers-reduced-motion for accessibility.
  */
 export default function PageFadeIn({ children }: PageFadeInProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const variants = shouldReduceMotion ? noopVariants : pageFadeVariants;
+  const reduce = useReducedMotion();
+  const variants = reduce ? noop : pageFadeVariants;
 
   return (
     <motion.div

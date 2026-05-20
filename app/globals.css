@@ -1,72 +1,267 @@
 @import "tailwindcss";
 
 /* ============================================================
-   SKYCOMFY HOTEL KITALE — Design Token System (Tailwind v4)
-   Equivalent to tailwind.config.ts theme.extend in Tailwind v3
+   SKYCOMFY HOTEL KITALE — Premium Design Token System
+   Refined for elegance, balance, and conversion
    ============================================================ */
 
 @theme {
-  /* ----------------------------------------------------------
-     Colors
-     ---------------------------------------------------------- */
-  --color-primary:       #2c2c2c;   /* Deep charcoal — main brand colour */
-  --color-accent:        #c9a84c;   /* Muted gold — CTAs, highlights, active states */
-  --color-background:    #f5f0e6;   /* Warm ivory — page background */
-  --color-surface:       #ffffff;   /* Card/panel backgrounds */
-  --color-foreground:    #1a1a1a;   /* Primary text */
-  --color-muted:         #6b7280;   /* Secondary text, captions */
-  --color-border:        #e5e0d8;   /* Subtle borders */
-  --color-primary-light: #444444;   /* Hover state for primary */
-  --color-accent-light:  #d4b46a;   /* Hover state for accent */
+  /* ── Brand Colours ── */
+  --color-primary:       #1a2744;   /* Deep navy — authority & calm */
+  --color-accent:        #d4a843;   /* Warm antique gold — CTAs, highlights */
+  --color-accent-dark:   #b8923a;   /* Hover/active gold */
+  --color-background:    #faf8f4;   /* Warm ivory — page canvas */
+  --color-surface:       #ffffff;   /* White card panels */
+  --color-foreground:    #1a1a1a;   /* Near-black body text */
+  --color-muted:         #6b7280;   /* Secondary text */
 
-  /* ----------------------------------------------------------
-     Font Families
-     ---------------------------------------------------------- */
-  --font-serif: var(--font-playfair), Georgia, serif;
-  --font-sans:  var(--font-inter), system-ui, sans-serif;
+  /* ── Extended Neutrals ── */
+  --color-border:        #e8e4dc;   /* Warm mid-grey border */
+  --color-surface-alt:   #f5f2eb;   /* Alternate surface (stats strip) */
 
-  /* ----------------------------------------------------------
-     Font Sizes (display scale)
-     ---------------------------------------------------------- */
-  --font-size-display-xl: 4.5rem;
+  /* ── Semantic ── */
+  --color-success:       #22c55e;
+  --color-info:          #3b82f6;
+
+  /* ── Font Families ── */
+  --font-serif:  var(--font-playfair), Georgia, 'Times New Roman', serif;
+  --font-sans:   var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono:   ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+
+  /* ── Font Sizes (display scale) ── */
+  --font-size-display-xl: 4.5rem;    /* 72px — page hero */
   --line-height-display-xl: 1.1;
   --letter-spacing-display-xl: -0.02em;
 
-  --font-size-display-lg: 3.5rem;
+  --font-size-display-lg: 3.5rem;    /* 56px — page sub-headers */
   --line-height-display-lg: 1.15;
   --letter-spacing-display-lg: -0.02em;
 
-  --font-size-display-md: 2.5rem;
+  --font-size-display-md: 2.5rem;   /* 40px — section headers */
   --line-height-display-md: 1.2;
   --letter-spacing-display-md: -0.01em;
 
-  /* ----------------------------------------------------------
-     Spacing
-     ---------------------------------------------------------- */
-  --spacing-section:    5rem;   /* py-section  = 80px vertical padding */
-  --spacing-section-sm: 3rem;   /* py-section-sm = 48px for tighter sections */
+  --font-size-display-sm: 2rem;     /* 32px — card titles */
+  --line-height-display-sm: 1.25;
 
-  /* ----------------------------------------------------------
-     Border Radius
-     ---------------------------------------------------------- */
-  --radius-card: 0.75rem;   /* 12px — room cards, service cards */
-  --radius-btn:  0.375rem;  /* 6px  — buttons */
-  --radius-pill: 9999px;    /* pill badges */
+  /* ── Spacing ── */
+  --spacing-section:     5rem;   /* py-section  = 80px */
+  --spacing-section-sm:  3rem;   /* py-section-sm = 48px */
 
-  /* ----------------------------------------------------------
-     Box Shadows
-     ---------------------------------------------------------- */
-  --shadow-card:      0 4px 24px rgba(26, 39, 68, 0.08);
-  --shadow-card-hover: 0 12px 40px rgba(26, 39, 68, 0.16);
-  --shadow-navbar:    0 2px 16px rgba(26, 39, 68, 0.12);
-  --shadow-btn:       0 2px 8px rgba(201, 168, 76, 0.3);
+  /* ── Border Radius ── */
+  --radius-card:  0.75rem;   /* 12px — rou  */
+  --radius-btn:   0.375rem;  /*  6px — buttons */
+  --radius-pill:  9999px;    /* pill badges */
+  --radius-lg:    1rem;      /* 16px — elevated panels */
 
-  /* ----------------------------------------------------------
-     Background Images
-     ---------------------------------------------------------- */
-  --background-image-hero-overlay: linear-gradient(
-    to bottom,
-    rgba(26, 39, 68, 0.55) 0%,
-    rgba(26, 39, 68, 0.35) 100%
-  );
+  /* ── Box Shadows ── */
+  --shadow-card:       0 4px 24px rgba(26, 39, 68, 0.07);
+  --shadow-card-hover: 0 16px 48px rgba(26, 39, 68, 0.15);
+  --shadow-navbar:     0 2px 24px rgba(26, 39, 68, 0.12);
+  --shadow-btn:        0 4px 16px rgba(212, 168, 67, 0.30);
+  --shadow-float:      0 8px 32px rgba(26, 39, 68, 0.14);
+  --shadow-inset:      inset 0 1px 4px rgba(0, 0, 0, 0.06);
+
+  /* ── Backdrop Blur ── */
+  --glass-sm:  blur(6px);
+  --glass-md:  blur(12px);
+  --glass-lg:  blur(20px);
+
+  /* ── Background Images ── */
+  --bg-hero-overlay:   linear-gradient(160deg, rgba(26,39,68,0.70) 0%, rgba(26,39,68,0.45) 55%, rgba(26,39,68,0.60) 100%);
+  --bg-accent-vignette:  radial-gradient(ellipse at center, rgba(212,168,67,0.08) 0%, transparent 70%);
+  --bg-gold-divider:    linear-gradient(90deg, transparent 0%, #d4a843 35%, transparent 65%, transparent 100%);
+}
+
+/* ============================================================
+   Global Body & Base Styles
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  selection: background-color color-mix(in srgb, var(--color-accent) 35%, white);
+  selection-color: var(--color-primary);
+}
+
+/* ── Selection ── */
+::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 35%, white);
+  color: var(--color-primary);
+}
+
+/* ── Scrollbar ── */
+*::-webkit-scrollbar { width: 8px; }
+*::-webkit-scrollbar-track { background: var(--color-background); }
+*::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--color-primary) 25%, white); border-radius: 8px; }
+*::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+
+/* ── Focus Visible ── */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   Utility: Gold Accent Divider
+   Usage: <div className="divider-gold" />
+   ============================================================ */
+.divider-gold {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  border-radius: 2px;
+}
+
+.divider-gold-full {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent) 35%, var(--color-accent) 65%, transparent 100%);
+  opacity: 0.45;
+}
+
+/* ============================================================
+   Utility: Decorative ornament (\u00a0✦\u00a0 style)
+   ============================================================ */
+.ornament {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+/* ============================================================
+   Utility: Button Base (convention for consistency)
+   ============================================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--color-primary);
+  color: white;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: var(--radius-btn);
+  box-shadow: var(--shadow-btn);
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--color-primary) 85%, white);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(212, 168, 67, 0.35);
+}
+
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: var(--radius-btn);
+  box-shadow: var(--shadow-btn);
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.btn-accent:hover {
+  background: var(--color-accent-dark);
+  transform: translateY(-1px);
+}
+
+.btn-outline-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: white;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: var(--radius-btn);
+  border: 1.5px solid rgba(255,255,255,0.55);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.btn-outline-light:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.08);
+}
+
+.btn-outline-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: var(--radius-btn);
+  border: 1.5px solid var(--color-border);
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.btn-outline-dark:hover {
+  border-color: var(--color-primary);
+}
+
+/* ============================================================
+   Utility: Section label (eyebrow / section label)
+   ============================================================ */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   Utility: PROSE text
+   ============================================================ */
+.prose {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-foreground) 65%, white);
+}
+
+/* ============================================================
+   Utility: Card elevation palette
+   ============================================================ */
+.card-surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s ease,
+              transform    0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-surface:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: color-mix(in srgb, var(--color-border) 50%, var(--color-accent) 50%);
 }

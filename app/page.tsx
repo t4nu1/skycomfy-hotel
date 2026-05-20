@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BedDouble, Trees, UtensilsCrossed, CalendarDays, ArrowRight, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, BedDouble, Trees, UtensilsCrossed, ArrowRight, Phone } from 'lucide-react';
 import { rooms } from '@/constants/rooms';
 import { services } from '@/constants/services';
 import { testimonials } from '@/constants/testimonials';
@@ -14,248 +14,333 @@ import SectionWrapper from '@/components/ui/SectionWrapper';
 import PageFadeIn from '@/components/ui/PageFadeIn';
 import CTASection from '@/components/ui/CTASection';
 
-export default function Home() {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+const HERO_IMG = 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1600&q=85';
+const WHATSAPP  = 'https://wa.me/254747118328';
 
-  // Auto-advance testimonials every 6 seconds
+export default function Home() {
+  // ─── Testimonial rotator ───
+  const [activeT, setActiveT] = useState(0);
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setActiveT((p) => (p + 1) % testimonials.length), 6500);
+    return () => clearInterval(t);
   }, []);
 
-  const handlePrevTestimonial = () => {
-    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  const handleNextTestimonial = () => {
-    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-  };
+  const nextT = useCallback(() => setActiveT((p) => (p + 1) % testimonials.length), []);
+  const prevT = useCallback(() => setActiveT((p) => (p - 1 + testimonials.length) % testimonials.length), []);
 
   return (
     <PageFadeIn>
-      {/* 1. HERO SECTION */}
-      <section className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] min-h-[600px] flex items-center justify-center overflow-hidden bg-primary">
-        {/* Background Image */}
+      {/* ════════════════════════════════════════
+          1. HERO — full-bleed, immersive
+          ════════════════════════════════════════ */}
+      <section
+        className="relative h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] min-h-[600px]
+                   flex items-center justify-center overflow-hidden bg-primary"
+        aria-label="Welcome"
+      >
+        {/* Background image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1600"
-            alt="Skycomfy Hotel premium room accommodation"
+            src={HERO_IMG}
+            alt="Skycomfy Hotel luxurious view"
             fill
             priority
-            className="object-cover object-center brightness-[0.65] contrast-[1.05]"
+            fetchPriority="high"
+            className="object-cover object-center transition-transform duration-[2.5s] ease-out
+                       will-change-transform scale-105 group-hover:scale-100"
+            style={{ WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0.3) 100%)' }}
           />
-          {/* Theme overlay fromGlobals */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-primary/65" />
+          {/* Dual-layer overlay: deep navy gradient + subtle vignette */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_60%,rgba(26,39,68,0.25)_0%,transparent_70%)] z-[1]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.78] via-primary/[0.38] to-primary/70 z-[2]" />
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white flex flex-col items-center">
-          <motion.span
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="font-sans text-xs md:text-sm font-semibold tracking-[0.25em] text-accent uppercase mb-4"
-          >
-            Welcome to SKYCOMFY HOTEL KITALE
-          </motion.span>
+        {/* Content */}
+        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center text-white">
 
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
+          {/* Gold eyebrow pill */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 leading-[1.1] max-w-4xl"
+            transition={{ duration: 0.55, delay: 0.15 }}
+            className="mx-auto mb-5 flex items-center justify-center gap-2 rounded-full
+                       border border-accent/35"
+            style={{ background: 'rgba(212,168,67,0.10)', padding: '6px 18px' }}
           >
-            Comfort Meets Elegance in the Heart of Kitale
+            <span className="block h-[5px] w-[5px] rounded-full bg-accent" />
+            <span className="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-accent">
+              Welcome to SKYCOMFY HOTEL KITALE
+            </span>
+            <span className="block h-[5px] w-[5px] rounded-full bg-accent" />
+          </motion.div>
+
+          {/* Main headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.25 }}
+            className="font-serif font-bold leading-[1.08] tracking-tight
+                       text-[clamp(2rem,5vw+0.5rem,3.75rem)] max-w-4xl mx-auto mb-6"
+          >
+            Comfort Meets Elegance
+            <br />
+            <span className="text-accent" style={{ WebkitTextStroke: '0.5px var(--color-accent)', WebkitTextFillColor: 'transparent' }}>
+              in the Heart of Kitale
+            </span>
           </motion.h1>
 
+          {/* Sub-copy */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="font-sans text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mb-10 leading-relaxed"
+            transition={{ duration: 0.6, delay: 0.38 }}
+            className="mx-auto mb-10 max-w-2xl text-sm md:text-base text-white/70 leading-relaxed"
           >
-            Experience premium accommodations, delectable local and international cuisine, fully equipped conference centers, and serene garden wedding settings.
+            Experience premium accommodations, delectable local and international cuisine,
+            fully equipped conference facilities, and serene garden wedding settings.
           </motion.p>
 
-          {/* Action CTAs */}
+          {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+            transition={{ duration: 0.45, delay: 0.52 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link
               href="/rooms"
-              className="inline-flex items-center justify-center px-8 py-3 bg-accent text-primary font-sans font-semibold text-sm rounded-btn shadow-btn hover:bg-accent-light transition-all duration-200"
+              className="btn-accent px-9 py-3.5 text-sm uppercase tracking-wider"
             >
-              Explore Our Rooms
+              Explore Rooms
             </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center px-8 py-3 bg-transparent border-2 border-white/70 hover:border-white text-white font-sans font-semibold text-sm rounded-btn hover:bg-white/5 transition-all duration-200"
+            <a
+              href={WHATSAPP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline-light px-9 py-3.5 text-sm uppercase tracking-wider"
             >
-              Book Your Stay
-            </Link>
+              <Phone size={14} />
+              Book via WhatsApp
+            </a>
           </motion.div>
         </div>
 
-        {/* Scroll down mouse animation */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/50 text-xs tracking-widest font-sans">
-          <span>SCROLL</span>
-          <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center p-1">
+        {/* Scroll hint */}
+        <motion.div
+          className="absolute bottom-7 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.45 }}
+          transition={{ delay: 1.4, duration: 1 }}
+          aria-hidden="true"
+        >
+          <span className="text-[0.6rem] font-sans uppercase tracking-[0.3em] text-white">Scroll</span>
+          <div className="h-7 w-[1px] bg-white/40 relative overflow-hidden rounded-full">
             <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-              className="w-1 h-1.5 bg-accent rounded-full"
+              className="absolute left-0 right-0 h-3 bg-accent/70"
+              animate={{ top: ['-12px', '28px', '-12px'] }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
             />
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* 2. ABOUT PREVIEW SECTION */}
-      <section className="bg-background py-20 px-4 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Image stack (visual beauty) */}
+      {/* ════════════════════════════════════════
+          2. ABOUT PREVIEW
+          ════════════════════════════════════════ */}
+      <section className="bg-background py-section-sm md:py-section px-4" aria-labelledby="about-heading">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+            {/* Image panel */}
             <SectionWrapper direction="left">
-              <div className="relative group rounded-card overflow-hidden shadow-card aspect-[4/3] lg:aspect-[1.1] w-full">
+              <div className="relative group rounded-card overflow-hidden shadow-card aspect-[4/3] bg-primary">
                 <Image
-                  src="https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=800"
-                  alt="Cozy garden pathways at Skycomfy Hotel"
+                  src="https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=900&q=80"
+                  alt="Lush garden pathways at Skycomfy Hotel"
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-w: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/0 transition-colors duration-300" />
+                {/* Decorative inner glow */}
+                <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[0.04]" />
               </div>
             </SectionWrapper>
 
-            {/* Text description */}
+            {/* Text panel */}
             <SectionWrapper direction="right">
               <div className="flex flex-col gap-6">
-                <span className="font-sans text-xs md:text-sm font-semibold tracking-wider text-accent uppercase">
+                {/* Gold label pill */}
+                <div
+                  className="w-fit font-sans text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-accent flex items-center gap-2"
+                  style={{ borderBottom: '1.5px solid var(--color-accent)', paddingBottom: '4px' }}
+                >
+                  <span className="block h-[5px] w-[5px] rounded-full bg-accent" />
                   A Sanctuary of Serenity
-                </span>
-                <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground leading-tight">
+                </div>
+
+                <h2 id="about-heading" className="font-serif text-3xl md:text-4xl font-bold text-foreground leading-[1.1]">
                   Discover a True Oasis in Kitale
                 </h2>
-                <div className="w-16 h-1 bg-accent rounded-full" />
-                <p className="font-sans text-sm md:text-base text-muted leading-relaxed">
-                  Located off the Kitale-Kapenguria Highway, <strong>SKYCOMFY HOTEL KITALE</strong> offers a peaceful and luxurious escape from the hustle of city life. We offer a space where comfort, modern convenience, and the warmth of Kenyan hospitality merge.
+
+                <p className="text-sm md:text-base text-muted leading-relaxed">
+                  Located off the Kitale–Kapenguria Highway, <strong>SKYCOMFY HOTEL KITALE</strong> offers
+                  a peaceful and luxurious escape from the hustle of city life — a space where comfort,
+                  modern convenience, and the warmth of Kenyan hospitality merge seamlessly.
                 </p>
-                <p className="font-sans text-sm md:text-base text-muted leading-relaxed">
-                  Whether you are visiting for business, planning a dynamic corporate conference, exploring scenic tourism, or looking to tie the knot in our gorgeous lush gardens, our team is committed to making your stay flawless.
+                <p className="text-sm md:text-base text-muted leading-relaxed">
+                  Whether you are visiting for business, planning a dynamic corporate conference,
+                  exploring scenic tourism, or looking to tie the knot in our gorgeous gardens,
+                  our team is committed to making your stay flawless.
                 </p>
-                <div className="flex flex-wrap gap-6 mt-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
-                      <BedDouble size={20} />
+
+                {/* Feature highlights */}
+                <div className="grid grid-cols-3 gap-4 pt-4">
+                  {[
+                    { icon: BedDouble,  label: 'Cozy Rooms' },
+                    { icon: UtensilsCrossed, label: 'Fine Dining' },
+                    { icon: Trees,     label: 'Lush Gardens' },
+                  ].map(({ icon: Icon, label }) => (
+                    <div key={label} className="flex flex-col items-center gap-2 p-3 rounded-lg bg-surface-alt/60 border border-border/50">
+                      <Icon size={18} className="text-accent" />
+                      <span className="text-[0.65rem] font-sans font-semibold text-foreground/70 tracking-wide uppercase">
+                        {label}
+                      </span>
                     </div>
-                    <span className="font-sans text-sm font-semibold text-foreground">Cozy Rooms</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
-                      <UtensilsCrossed size={20} />
-                    </div>
-                    <span className="font-sans text-sm font-semibold text-foreground">Fine Dining</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
-                      <Trees size={20} />
-                    </div>
-                    <span className="font-sans text-sm font-semibold text-foreground">Lush Gardens</span>
-                  </div>
+                  ))}
                 </div>
-                <div className="mt-4">
-                  <Link
-                    href="/about"
-                    className="inline-flex items-center gap-2 text-accent hover:text-accent-light font-sans font-semibold text-sm transition-colors duration-200 group"
-                  >
-                    Learn More About Us
-                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </div>
+
+                {/* arrow-link */}
+                <Link
+                  href="/about"
+                  className="group flex w-fit items-center gap-2 text-accent font-sans text-sm font-semibold
+                             transition-colors hover:text-accent-dark"
+                >
+                  Learn More About Us
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                  <span className="block h-px w-8 bg-accent/30 group-hover:w-14 transition-all duration-300" />
+                </Link>
               </div>
             </SectionWrapper>
+
           </div>
         </div>
       </section>
 
-      {/* 3. FEATURED ROOMS SECTION */}
-      <section className="bg-surface py-20 md:py-28 border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ════════════════════════════════════════
+          3. FEATURED ROOMS
+          ════════════════════════════════════════ */}
+      <section className="bg-surface border-y border-border py-section-sm md:py-section px-4" aria-labelledby="rooms-heading">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+
+          {/* Section header */}
           <SectionWrapper direction="up">
-            <div className="text-center max-w-2xl mx-auto mb-16 flex flex-col items-center gap-4">
-              <span className="font-sans text-xs md:text-sm font-semibold tracking-wider text-accent uppercase">
+            <div className="text-center mb-14 max-w-2xl mx-auto flex flex-col items-center gap-4">
+              <div className="section-label">
+                <span className="ornament" aria-hidden="true" />
                 Premium Stays
-              </span>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
-                Our Luxurious Rooms & Suites
+                <span className="ornament" aria-hidden="true" />
+              </div>
+              <h2 id="rooms-heading" className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+                Our Luxurious Rooms &amp; Suites
               </h2>
-              <div className="w-16 h-1 bg-accent rounded-full" />
-              <p className="font-sans text-sm md:text-base text-muted">
-                Each room is meticulously designed to offer a peaceful haven, boasting premium linens, modern en-suite amenities, and scenic regional views.
+              <p className="text-sm md:text-base text-muted leading-relaxed">
+                Each room is meticulously designed to offer a peaceful haven,
+                boasting premium linens, modern en-suite amenities, and scenic regional views.
               </p>
             </div>
           </SectionWrapper>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {rooms.map((room, index) => (
-              <SectionWrapper key={room.id} direction="up" delay={index * 0.15}>
-                <article className="flex flex-col h-full bg-background rounded-card border border-border overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 group">
-                  {/* Image container */}
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-primary">
+          {/* Room cards grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 md:gap-8">
+            {rooms.map((room, i) => (
+              <SectionWrapper key={room.id} direction="up" delay={i * 0.1}>
+                <article
+                  className="group flex flex-col h-full bg-surface rounded-card border border-border overflow-hidden
+                             shadow-card hover:shadow-card-hover transition-all duration-400 ease-out"
+                >
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-primary">
                     <Image
                       src={room.images[0]}
-                      alt={room.name}
+                      alt={`${room.name} — interior`}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-w: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     />
-                    <div className="absolute top-4 right-4 bg-accent text-primary px-3 py-1 font-sans text-xs font-bold rounded-pill shadow-sm">
+                    {/* Secondary image reveals on hover via crossfade */}
+                    {room.images[1] && (
+                      <Image
+                        src={room.images[1]}
+                        alt=""
+                        fill
+                        sizes="(max-w: 768px) 100vw, 33vw"
+                        className="object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                        aria-hidden="true"
+                      />
+                    )}
+
+                    {/* Price badge */}
+                    <div
+                      className="absolute right-4 top-4 font-sans text-[0.625rem] font-bold uppercase tracking-widest rounded-pill"
+                      style={{
+                        background: 'var(--color-accent)',
+                        color: 'var(--color-primary)',
+                        padding: '4px 12px',
+                      }}
+                    >
                       {room.priceFrom}
                     </div>
                   </div>
 
-                  {/* Room Details */}
-                  <div className="flex flex-col flex-grow p-6">
-                    <h3 className="font-serif text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-200">
+                  {/* Card body */}
+                  <div className="flex flex-col flex-grow gap-3 p-6">
+                    <h3 className="font-serif text-lg font-bold text-foreground group-hover:text-accent transition-colors duration-300">
                       {room.name}
                     </h3>
-                    <p className="font-sans text-xs md:text-sm text-muted leading-relaxed flex-grow mb-5">
+                    <p className="text-xs md:text-sm text-muted/75 leading-relaxed flex-grow">
                       {room.shortDescription}
                     </p>
 
-                    {/* Key amenities icons */}
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {room.amenities.slice(0, 3).map((amenity) => (
+                    {/* Amenity chips */}
+                    <div className="flex flex-wrap gap-1.5 pt-3">
+                      {room.amenities.slice(0, 3).map((a) => (
                         <span
-                          key={amenity}
-                          className="font-sans text-[11px] bg-primary/5 text-primary/80 px-2 py-0.5 rounded-sm"
+                          key={a}
+                          className="font-sans text-[0.6rem] uppercase tracking-wider
+                                     bg-primary/[0.04] text-primary/60 px-2 py-1 rounded-sm"
                         >
-                          {amenity}
+                          {a}
                         </span>
                       ))}
                       {room.amenities.length > 3 && (
-                        <span className="font-sans text-[11px] bg-primary/5 text-primary/80 px-2 py-0.5 rounded-sm">
-                          +{room.amenities.length - 3} More
+                        <span
+                          className="font-sans text-[0.6rem] uppercase tracking-wider
+                                     bg-primary/[0.04] text-primary/60 px-2 py-1 rounded-sm"
+                        >
+                          +{room.amenities.length - 3} more
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-border pt-4 mt-auto">
+                    {/* Bottom action row */}
+                    <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
                       <Link
                         href={`/rooms/${room.slug}`}
-                        className="font-sans text-xs font-semibold text-primary hover:text-accent transition-colors duration-200"
+                        className="font-sans text-[0.6875rem] font-semibold uppercase tracking-wider
+                                   text-foreground/60 hover:text-accent transition-colors duration-200"
                       >
                         View Details
                       </Link>
                       <Link
                         href="/contact"
-                        className="font-sans text-xs font-bold text-accent hover:text-accent-light flex items-center gap-1 transition-colors duration-200"
+                        className="font-sans text-[0.6875rem] font-bold uppercase tracking-wider text-accent
+                                   flex items-center gap-1 hover:gap-2 transition-all duration-200"
                       >
                         Book Now
-                        <ArrowRight size={14} />
+                        <ArrowRight size={12} />
                       </Link>
                     </div>
                   </div>
@@ -264,130 +349,161 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          {/* see-all link */}
+          <div className="mt-10 text-center">
             <Link
               href="/rooms"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white hover:bg-primary-light font-sans font-semibold text-sm rounded-btn transition-colors duration-200"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-primary text-white
+                         font-sans text-xs font-semibold uppercase tracking-widest rounded-btn shadow-md
+                         transition-all duration-300 hover:bg-primary-light hover:-translate-y-[2px]"
             >
-              See All Accommodations
+              View All Accommodations
+              <ArrowRight size={14} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 4. SERVICES SECTION */}
-      <section className="bg-background py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ════════════════════════════════════════
+          4. AMENITIES & SERVICES
+          ════════════════════════════════════════ */}
+      <section className="bg-background py-section px-4" aria-labelledby="services-heading">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+
           <SectionWrapper direction="up">
-            <div className="text-center max-w-2xl mx-auto mb-16 flex flex-col items-center gap-4">
-              <span className="font-sans text-xs md:text-sm font-semibold tracking-wider text-accent uppercase">
+            <div className="text-center mb-14 max-w-2xl mx-auto flex flex-col items-center gap-4">
+              <div className="section-label">
+                <span className="ornament" aria-hidden="true" />
                 What We Offer
-              </span>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
-                Exceptional Amenities & Experiences
+                <span className="ornament" aria-hidden="true" />
+              </div>
+              <h2 id="services-heading" className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+                Exceptional Amenities &amp; Experiences
               </h2>
-              <div className="w-16 h-1 bg-accent rounded-full" />
-              <p className="font-sans text-sm md:text-base text-muted">
-                From cozy garden bonfire evenings to state-of-the-art business conferences, we tailor our amenities to your ultimate comfort.
+              <p className="text-sm md:text-base text-muted leading-relaxed">
+                From cozy garden bonfire evenings to state-of-the-art business conferences,
+                we tailor our amenities to your ultimate comfort.
               </p>
             </div>
           </SectionWrapper>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {services.map((service, index) => (
-              <SectionWrapper key={service.id} direction="up" delay={index * 0.1}>
-                <ServiceCard service={service} />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-6">
+            {services.map((svc, i) => (
+              <SectionWrapper key={svc.id} direction="up" delay={i * 0.06}>
+                <ServiceCard service={svc} index={i} />
               </SectionWrapper>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 5. TESTIMONIALS SECTION */}
-      <section className="bg-primary text-white py-20 md:py-28 overflow-hidden relative">
-        {/* Subtle decorative background circles */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-accent/5 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-accent/5 blur-3xl pointer-events-none" />
+      {/* ════════════════════════════════════════
+          5. TESTIMONIALS
+          ════════════════════════════════════════ */}
+      <section
+        className="relative py-section-sm md:py-section px-4 overflow-hidden"
+        style={{ background: 'var(--color-primary)' }}
+        aria-labelledby="testimonials-heading"
+      >
+        {/* Decorative gold rings */}
+        <div className="pointer-events-none absolute -top-24 -left-24 h-[480px] w-[480px] rounded-full border border-accent/[0.05]" aria-hidden="true" />
+        <div className="pointer-events-none absolute -bottom-24 -right-24 h-[480px] w-[480px] rounded-full border border-accent/[0.05]" aria-hidden="true" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="relative mx-auto max-w-4xl px-6 md:px-8">
           <SectionWrapper direction="up">
-            <div className="text-center flex flex-col items-center gap-4 mb-12">
-              <span className="font-sans text-xs md:text-sm font-semibold tracking-wider text-accent uppercase">
-                Guest Reviews
-              </span>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold">
+            <div className="text-center mb-10">
+              <h2 id="testimonials-heading" className="font-serif text-3xl md:text-4xl font-bold text-white leading-tight mb-2">
                 Loved by Our Guests
               </h2>
-              <div className="w-16 h-1 bg-accent rounded-full" />
+              <div className="divider-gold mx-auto" aria-hidden="true" />
             </div>
           </SectionWrapper>
 
-          {/* Testimonial Active Display Card with Fade transitions */}
+          {/* Active testimonial card */}
           <SectionWrapper direction="none">
-            <div className="relative bg-white/5 border border-white/10 rounded-card p-8 md:p-12 text-center flex flex-col items-center min-h-[250px] justify-center">
-              <Star className="text-accent fill-accent w-8 h-8 mb-6" />
+            <div
+              className="relative rounded-card border border-white/[0.09] p-8 md:p-14 text-center flex flex-col items-center
+                         min-h-[240px] justify-center"
+              style={{ background: 'rgba(255,255,255,0.04)' }}
+            >
+              <Star className="text-accent fill-accent w-8 h-8 mb-7" aria-hidden="true" />
 
-              <div className="relative flex-grow">
+              <div className="w-full max-w-2xl">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={activeTestimonial}
-                    initial={{ opacity: 0, y: 15 }}
+                    key={activeT}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center gap-4"
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col items-center gap-5"
                   >
-                    <blockquote className="font-serif text-lg md:text-xl leading-relaxed italic max-w-2xl">
-                      &ldquo;{testimonials[activeTestimonial].text}&rdquo;
+                    <blockquote
+                      className="font-serif text-lg md:text-xl leading-relaxed italic text-white/90 max-w-2xl"
+                      style={{ WebkitTextStroke: '0.2px rgba(255,255,255,0.04)' }}
+                    >
+                      &ldquo;{testimonials[activeT].text}&rdquo;
                     </blockquote>
-                    <cite className="font-sans text-xs md:text-sm font-semibold text-accent not-italic">
-                      — {testimonials[activeTestimonial].guestName}
+                    <cite
+                      className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-accent not-italic"
+                    >
+                      — {testimonials[activeT].guestName}
                     </cite>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* Slider pagination indicators */}
-              <div className="flex items-center gap-2 mt-8">
+              {/* Pagination dots */}
+              <div className="flex items-center gap-2 mt-7" role="tablist" aria-label="Testimonial navigation">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveTestimonial(i)}
-                    aria-label={`Go to testimonial ${i + 1}`}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                      i === activeTestimonial ? 'bg-accent w-6' : 'bg-white/30 hover:bg-white/50'
+                    onClick={() => setActiveT(i)}
+                    role="tab"
+                    aria-selected={i === activeT}
+                    aria-label={`Testimonial ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === activeT
+                        ? 'bg-accent w-7'
+                        : 'bg-white/20 hover:bg-white/40 w-1.5'
                     }`}
                   />
                 ))}
               </div>
 
-              {/* Slider Navigation Arrows */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:-left-16">
-                <button
-                  type="button"
-                  onClick={handlePrevTestimonial}
-                  aria-label="Previous testimonial"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-accent hover:text-primary transition-all duration-200 border border-white/15"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-              </div>
-              <div className="absolute top-1/2 -translate-y-1/2 right-2 md:-right-16">
-                <button
-                  type="button"
-                  onClick={handleNextTestimonial}
-                  aria-label="Next testimonial"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-accent hover:text-primary transition-all duration-200 border border-white/15"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
+              {/* Arrow buttons */}
+              <button
+                type="button"
+                onClick={prevT}
+                aria-label="Previous testimonial"
+                className="absolute left-0 top-1/2 -translate-y-1/2 hidden md:flex
+                           h-9 w-9 items-center justify-center rounded-full
+                           bg-white/[0.07] text-white/60 border border-white/10
+                           hover:bg-accent hover:text-primary hover:border-transparent
+                           transition-colors duration-250"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={nextT}
+                aria-label="Next testimonial"
+                className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:flex
+                           h-9 w-9 items-center justify-center rounded-full
+                           bg-white/[0.07] text-white/60 border border-white/10
+                           hover:bg-accent hover:text-primary hover:border-transparent
+                           transition-colors duration-250"
+              >
+                <ChevronRight size={18} />
+              </button>
             </div>
           </SectionWrapper>
         </div>
       </section>
 
-      {/* 6. CALL TO ACTION SECTION */}
+      {/* ════════════════════════════════════════
+          6. CALL TO ACTION
+          ════════════════════════════════════════ */}
       <CTASection />
     </PageFadeIn>
   );

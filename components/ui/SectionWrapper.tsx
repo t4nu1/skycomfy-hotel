@@ -2,61 +2,42 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
-import { fadeUpVariants } from '@/lib/variants';
+import { fadeUpVariants, imageInVariants } from '@/lib/variants';
 import type { Variants } from 'framer-motion';
 
 interface SectionWrapperProps {
   children: React.ReactNode;
   className?: string;
-  /** Stagger delay in seconds (default: 0) */
-  delay?: number;
-  /** Direction of the entrance animation (default: 'up') */
+  delay?: number;              // stagger delay in seconds
   direction?: 'up' | 'left' | 'right' | 'none';
+  /** When true, applies image-in variant (scale + opacity) instead of directional */
+  asImage?: boolean;
 }
 
-const directionalVariants: Record<'up' | 'left' | 'right' | 'none', Variants> = {
-  up: fadeUpVariants,
-  left: {
-    hidden: { opacity: 0, x: -40 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-    },
-  },
-  right: {
-    hidden: { opacity: 0, x: 40 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-    },
-  },
-  none: {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.5 },
-    },
-  },
+const dirVariants: Record<'up' | 'left' | 'right' | 'none', Variants> = {
+  up:   { hidden: { opacity: 0, y: 36 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } },
+  left: { hidden: { opacity: 0, x: -36 }, visible: { opacity: 1, x: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } },
+  right:{ hidden: { opacity: 0, x:  36 }, visible: { opacity: 1, x: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } },
+  none: { hidden: { opacity: 0 },        visible: { opacity: 1, transition: { duration: 0.5 } } },
 };
 
-/** No-op variants used when the user prefers reduced motion */
-const noopVariants: Variants = {
-  hidden: {},
-  visible: {},
-};
+const noop: Variants = { hidden: {}, visible: {} };
 
 export default function SectionWrapper({
   children,
   className,
   delay = 0,
   direction = 'up',
+  asImage = false,
 }: SectionWrapperProps) {
   const { ref, isInView } = useScrollReveal();
-  const shouldReduceMotion = useReducedMotion();
+  const reduce = useReducedMotion();
 
-  const variants = shouldReduceMotion ? noopVariants : directionalVariants[direction];
+  const variants: Variants = reduce
+    ? noop
+    : asImage
+      ? imageInVariants
+      : dirVariants[direction];
 
   return (
     <motion.div

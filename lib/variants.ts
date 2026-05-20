@@ -1,70 +1,76 @@
 import type { Variants } from 'framer-motion';
 
-// Fade up — default scroll reveal
+/* ─── Scroll-reveal ─── */
 export const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
-// Fade in — no directional movement
 export const fadeInVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.5 },
+    transition: { duration: 0.55, ease: 'easeOut' },
   },
 };
 
-// Stagger container — wraps a list of staggered children
+/* ─── Stagger container ─── */
 export const staggerContainerVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
   },
 };
 
-// Stagger item — used inside stagger container
 export const staggerItemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
+    transition: { duration: 0.55, ease: 'easeOut' },
   },
 };
 
-// Page fade-in
+/* ─── Page mount fade ─── */
 export const pageFadeVariants: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 8 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.4 },
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
-// Card hover
+/* ─── Card hover ─── */
 export const cardHoverVariants: Variants = {
   rest: {
     y: 0,
-    boxShadow: '0 4px 24px rgba(26,39,68,0.08)',
+    boxShadow: '0 4px 24px rgba(26,39,68,0.07)',
   },
   hover: {
-    y: -4,
-    boxShadow: '0 12px 40px rgba(26,39,68,0.16)',
-    transition: { duration: 0.25 },
+    y: -6,
+    boxShadow: '0 16px 48px rgba(26,39,68,0.14)',
+    transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
-// Button hover
+/* ─── Button hover + tap ─── */
 export const buttonHoverVariants: Variants = {
   rest: { scale: 1 },
-  hover: {
-    scale: 1.03,
-    transition: { duration: 0.2 },
-  },
+  hover: { scale: 1.04, transition: { duration: 0.2 } },
   tap: { scale: 0.97 },
+};
+
+/* ─── Image parallax in (slight scale) ─── */
+export const imageInVariants: Variants = {
+  hidden: { opacity: 0, scale: 1.08 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+  },
 };

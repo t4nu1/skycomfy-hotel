@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { Check, ShieldAlert, ArrowRight } from 'lucide-react';
 import { rooms } from '@/constants/rooms';
 import SectionWrapper from '@/components/ui/SectionWrapper';
@@ -12,55 +11,69 @@ import CTASection from '@/components/ui/CTASection';
 export default function RoomsPage() {
   return (
     <PageFadeIn>
-      {/* 1. ROOMS HERO */}
-      <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center bg-primary text-white">
+      {/*
+       * ───────────────────────────────────────────────────────
+       * 1. PAGE HERO
+       * ───────────────────────────────────────────────────────
+       */}
+      <section className="relative h-[38vh] min-h-[300px] flex items-center justify-center bg-primary text-white"
+               aria-label="Rooms &amp; Suites hero">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1600"
-            alt="Deluxe Room with premium amenities at Skycomfy Hotel"
+            src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1600&q=85"
+            alt="Skycomfy Deluxe Room interior"
             fill
             priority
-            className="object-cover brightness-50"
+            className="object-cover brightness-[0.40]"
           />
-          <div className="absolute inset-0 bg-primary/45" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/30 to-primary/55" />
         </div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-sans text-xs md:text-sm font-semibold tracking-widest text-accent uppercase mb-3 block"
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <div
+            className="mx-auto mb-4 flex items-center justify-center gap-2 rounded-full border border-accent/35"
+            style={{ background: 'rgba(212,168,67,0.10)', padding: '5px 16px', width: 'fit-content' }}
           >
-            Luxurious Stays
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
-          >
-            Rooms & Suites
-          </motion.h1>
+            <span className="block h-[5px] w-[5px] rounded-full bg-accent" />
+            <span className="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-accent">
+              Luxurious Stays
+            </span>
+            <span className="block h-[5px] w-[5px] rounded-full bg-accent" />
+          </div>
+          <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
+            Rooms &amp; Suites
+          </h1>
         </div>
       </section>
 
-      {/* 2. ROOMS INTRODUCTION */}
-      <section className="bg-background pt-16 pb-8 px-4 text-center">
-        <div className="max-w-3xl mx-auto flex flex-col items-center gap-4">
-          <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground">
-            Tailored for Ultimate Rest & Relaxation
+      {/*
+       * ───────────────────────────────────────────────────────
+       * 2. ROOM INTRO
+       * ───────────────────────────────────────────────────────
+       */}
+      <section className="bg-background pt-section-sm pb-6 px-4">
+        <div className="mx-auto max-w-3xl text-center flex flex-col items-center gap-4">
+          <h2 className="section-label" style={{ borderBottom: 'none' }}>
+            <span className="ornament" aria-hidden="true" />
+            Accommodations
+            <span className="ornament" aria-hidden="true" />
           </h2>
-          <div className="w-16 h-1 bg-accent rounded-full" />
-          <p className="font-sans text-sm md:text-base text-muted leading-relaxed">
-            From business travels to honeymoon packages, we offer three exquisite accommodation options. Experience soundproofed sanctuaries, soft linens, high-speed Wi-Fi, and scenic garden or highway views.
+          <p className="text-sm md:text-base text-muted leading-relaxed">
+            From business travels to honeymoon packages, we offer three exquisite accommodation
+            options. Experience soundproofed sanctuaries, soft linens, high-speed Wi-Fi, and
+            scenic garden or highway views.
           </p>
         </div>
       </section>
 
-      {/* 3. ALTERNATING ROOM DIRECTORY */}
-      <section className="bg-background py-16 px-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-20">
-          {rooms.map((room, index) => {
-            const isEven = index % 2 === 0;
+      {/*
+       * ───────────────────────────────────────────────────────
+       * 3. ROOM LISTING (alternating)
+       * ───────────────────────────────────────────────────────
+       */}
+      <section className="bg-background py-section-sm px-4">
+        <div className="mx-auto max-w-7xl px-6 md:px-8 flex flex-col gap-16 md:gap-20">
+          {rooms.map((room, idx) => {
+            const isEven = idx % 2 === 0;
             return (
               <SectionWrapper
                 key={room.id}
@@ -68,80 +81,100 @@ export default function RoomsPage() {
                 className="w-full"
               >
                 <article
-                  className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-16 bg-surface rounded-card border border-border p-6 md:p-8 shadow-card hover:shadow-card-hover transition-shadow duration-300 ${
-                    isEven ? '' : 'lg:flex-row-reverse'
-                  }`}
+                  className={`flex flex-col lg:flex-row gap-8 lg:gap-16 items-center bg-surface rounded-card
+                              border border-border p-6 md:p-8 shadow-card
+                              hover:shadow-card-hover transition-shadow duration-500
+                              ${isEven ? '' : 'lg:flex-row-reverse'}`}
                 >
-                  {/* Left: Image Carousel / Gallery display */}
-                  <div className="relative aspect-[4/3] w-full lg:w-1/2 rounded-card overflow-hidden group bg-primary shrink-0 shadow-sm">
+                  {/* ── Image panel ── */}
+                  <div className="relative w-full lg:w-[52%] aspect-[4/3] rounded-card overflow-hidden bg-primary shrink-0">
                     <Image
                       src={room.images[0]}
-                      alt={room.name}
+                      alt={`${room.name} — exterior view`}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-103"
+                      sizes="(max-w: 1024px) 100vw, 52vw"
+                      className="object-cover transition-transform duration-700 ease-out hover:scale-105"
                     />
-                    {/* Secondary Image hover crossfade effect */}
                     {room.images[1] && (
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                        <Image
-                          src={room.images[1]}
-                          alt={`${room.name} alternate view`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
+                      <Image
+                        src={room.images[1]}
+                        alt=""
+                        fill
+                        sizes="(max-w: 1024px) 100vw, 52vw"
+                        className="object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                        aria-hidden="true"
+                      />
                     )}
-                    <div className="absolute top-4 right-4 bg-primary/80 backdrop-blur-sm text-accent border border-accent/20 px-3 py-1 font-sans text-xs font-bold rounded-pill">
+                    {/* Featured badge */}
+                    <div
+                      className="absolute top-4 right-4 flex items-center gap-2 font-sans text-[0.6rem] font-bold
+                                 uppercase tracking-wider text-white rounded-pill"
+                      style={{
+                        background: 'rgba(26,39,68,0.75)',
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        padding: '4px 12px',
+                      }}
+                    >
                       Featured
                     </div>
                   </div>
 
-                  {/* Right: Room Spec Details */}
-                  <div className="flex flex-col flex-1 w-full gap-5">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-4">
-                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-foreground">
-                        {room.name}
-                      </h3>
-                      <div className="text-right">
-                        <span className="font-sans text-xs text-muted block">Rates From</span>
-                        <span className="font-sans text-lg font-bold text-accent">
-                          {room.priceFrom}
+                  {/* ── Detail panel ── */}
+                  <div className="flex flex-col gap-5 w-full lg:flex-1">
+                    {/* Header: name + rate */}
+                    <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border pb-4">
+                      <div>
+                        <h3 className="font-serif text-2xl md:text-3xl font-bold text-foreground">
+                          {room.name}
+                        </h3>
+                        <span className="font-sans text-xs text-accent uppercase tracking-wider mt-1">
+                          Starting from
                         </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="font-sans text-2xl font-bold text-accent">{room.priceFrom}</span>
+                        <span className="block text-[0.625rem] text-muted">per night</span>
                       </div>
                     </div>
 
-                    <p className="font-sans text-sm md:text-base text-muted leading-relaxed">
+                    <!-- Description -->
+                    <p className="text-sm md:text-base text-muted leading-relaxed">
                       {room.fullDescription}
                     </p>
 
-                    {/* Amenities Checklist */}
+                    {/* Amenities list */}
                     <div>
-                      <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-foreground mb-3">
-                        Included Amenities:
+                      <h4 className="font-sans text-[0.65rem] font-bold uppercase tracking-widest text-foreground/80 mb-3">
+                        Room Amenities
                       </h4>
-                      <ul className="grid grid-cols-2 gap-x-6 gap-y-2">
-                        {room.amenities.map((amenity) => (
-                          <li key={amenity} className="flex items-center gap-2 font-sans text-xs md:text-sm text-muted">
-                            <Check size={14} className="text-accent shrink-0" />
-                            <span>{amenity}</span>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+                        {room.amenities.map((a) => (
+                          <li key={a} className="flex items-center gap-2 text-sm text-muted/80">
+                            <Check
+                              size={14}
+                              className="text-accent shrink-0"
+                              strokeWidth={2.5}
+                            />
+                            <span>{a}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    {/* Booking / Details CTAs */}
-                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full sm:w-auto">
+                    {/* Actions */}
+                    <div className="flex flex-col sm:flex-row gap-3 pt-2 mt-auto">
                       <Link
                         href={`/rooms/${room.slug}`}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary-light text-white font-sans font-semibold text-sm rounded-btn transition-colors duration-200 w-full sm:w-auto text-center"
+                        className="btn-primary w-full sm:w-auto justify-center"
                       >
-                        Explore Details
+                        Explore Room
                       </Link>
                       <Link
                         href="/contact"
-                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-transparent border-2 border-accent hover:border-accent-light text-primary hover:text-accent font-sans font-semibold text-sm rounded-btn transition-colors duration-200 w-full sm:w-auto text-center"
+                        className="btn-outline-dark w-full sm:w-auto justify-center"
                       >
-                        Reserve Room
+                        Book Room
                         <ArrowRight size={14} />
                       </Link>
                     </div>
@@ -153,26 +186,42 @@ export default function RoomsPage() {
         </div>
       </section>
 
-      {/* 4. ROOM POLICIES / INFORMATION */}
-      <section className="bg-surface py-16 px-4 border-t border-border">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-background rounded-card border border-border p-8 flex flex-col md:flex-row gap-6 items-start">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent shrink-0">
-              <ShieldAlert size={24} />
+      {/*
+       * ───────────────────────────────────────────────────────
+       * 4. ROOM POLICIES
+       * ───────────────────────────────────────────────────────
+       */}
+      <section className="bg-surface-alt/50 border-t border-border py-section-sm px-4">
+        <div className="mx-auto max-w-5xl px-6">
+          <SectionWrapper direction="up">
+            <div
+              className="flex flex-col md:flex-row gap-6 items-start p-7 md:p-9 rounded-card
+                         bg-surface border border-border shadow-card"
+            >
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-full shrink-0"
+                style={{ background: 'rgba(212,168,67,0.12)', color: 'var(--color-accent)' }}
+              >
+                <ShieldAlert size={24} aria-hidden="true" />
+              </div>
+              <div className="flex flex-col gap-3">
+                <h3 className="font-serif text-lg font-bold text-foreground">
+                  Important Stay Policies &amp; Guidelines
+                </h3>
+                <p className="text-sm text-muted leading-relaxed">
+                  Check-in is from <strong className="text-foreground/90">12:00 PM</strong>,
+                  and checkout is required by <strong className="text-foreground/90">10:00 AM</strong>.
+                  Late checkout can be arranged subject to availability.
+                  Children under <strong className="text-foreground/90">5</strong> stay free when
+                  sharing with parents. All indoor spaces are strictly non-smoking.
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col gap-3">
-              <h3 className="font-serif text-lg font-bold text-foreground">
-                Important Stay Policies & Guidelines
-              </h3>
-              <p className="font-sans text-xs md:text-sm text-muted leading-relaxed">
-                Check-in time is standard from <strong>12:00 PM</strong>, and checkout is required by <strong>10:00 AM</strong>. Late checkout requests can be arranged with our booking desks, subject to availability. Children under 5 stay free when sharing rooms with parents. All our indoor spaces are strictly non-smoking.
-              </p>
-            </div>
-          </div>
+          </SectionWrapper>
         </div>
       </section>
 
-      {/* 5. CALL TO ACTION */}
+      {/* CTA */}
       <CTASection />
     </PageFadeIn>
   );
