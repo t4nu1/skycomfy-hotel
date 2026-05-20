@@ -2,14 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Star, BedDouble, Trees, UtensilsCrossed, ArrowRight, Phone } from 'lucide-react';
 import { rooms } from '@/constants/rooms';
 import { services } from '@/constants/services';
 import { testimonials } from '@/constants/testimonials';
 import ServiceCard from '@/components/cards/ServiceCard';
-import TestimonialCard from '@/components/cards/TestimonialCard';
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import PageFadeIn from '@/components/ui/PageFadeIn';
 import CTASection from '@/components/ui/CTASection';
@@ -390,7 +389,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-6">
             {services.map((svc, i) => (
               <SectionWrapper key={svc.id} direction="up" delay={i * 0.06}>
-                <ServiceCard service={svc} index={i} />
+                <ServiceCard service={svc} />
               </SectionWrapper>
             ))}
           </div>

@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { navLinks } from '@/constants/navigation';
 
-const NAV_HEIGHT_DESKTOP = 80;
 const NAV_HEIGHT_MOBILE = 64;
 
 /* ─── Mobile slide-in variants ─── */

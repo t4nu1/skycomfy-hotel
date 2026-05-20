@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { navLinks } from '@/constants/navigation';
 
 /* ─── Inline SVG social icons ─── */
 function InstagramIcon({ className }: { className?: string }) {
@@ -159,8 +158,7 @@ export default function Footer() {
               exclusive garden event invites.
             </p>
 
-            <form
-              onSubmit={(e) => e.preventDefault()}
+            <div
               className="flex flex-col gap-3"
               aria-label="Newsletter sign-up"
             >
@@ -168,16 +166,18 @@ export default function Footer() {
               <input
                 id="footer-email"
                 type="email"
+                name="email"
                 placeholder="Your email address"
+                autoComplete="email"
                 className="w-full rounded-btn bg-white/[0.08] border border-white/[0.12] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-accent transition-colors"
               />
               <button
-                type="submit"
+                type="button"
                 className="w-full py-3 bg-accent text-primary font-sans text-xs font-bold uppercase tracking-widest rounded-btn shadow-md hover:bg-accent-dark transition-colors duration-200"
               >
                 Subscribe
               </button>
-            </form>
+            </div>
           </div>
 
         </div>

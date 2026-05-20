@@ -7,51 +7,40 @@ import type { Service } from '@/types';
 
 interface ServiceCardProps {
   service: Service;
-  index?: number;   // stagger entrance offset
 }
 
-const noop = { rest: {}, hover: {} as Record<string, unknown> };
+export default function ServiceCard({ service }: ServiceCardProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const variants = prefersReducedMotion
+    ? { rest: {}, hover: {} }
+    : cardHoverVariants;
 
-export default function ServiceCard({ service, index = 0 }: ServiceCardProps) {
-  const reduce = useReducedMotion();
-  const variants = reduce ? noop : cardHoverVariants;
-
-  // Resolve Lucide icon component from the name string stored in the data
-  const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number }>>)[service.icon];
+  // Dynamic icon resolution — `as any` is intentional: icon name is a data-value, not a TS-known key
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const IconComp = (LucideIcons as any)[service.icon];
 
   return (
     <motion.article
       variants={variants}
       initial="rest"
-      whileHover="hover"
+      whileHover={prefersReducedMotion ? undefined : 'hover'}
       animate="rest"
       className="group flex flex-col items-center gap-5 rounded-card bg-surface border border-border p-7 shadow-card text-center"
-      style={{ transitionDelay: `${index * 60}ms` }}
     >
-      {/* Icon ring */}
-      <div className="relative flex h-[64px] w-[64px] items-center justify-center rounded-full bg-accent/[0.10]">
-        <div className="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100
-                        bg-accent/[0.08]" />
-        {Icon ? (
-          <Icon
-            size={28}
-            className="text-accent transition-colors duration-300 group-hover:text-accent-dark"
-            aria-hidden="true"
-          />
+      <div className="relative flex h-[64px] w-[64px] items-center justify-center rounded-full bg-accent/10">
+        <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-accent/8" />
+        {IconComp ? (
+          <IconComp size={28} className="text-accent transition-colors duration-300" aria-hidden="true" />
         ) : (
           <span className="sr-only">{service.icon}</span>
         )}
       </div>
 
-      {/* Name */}
-      <h3 className="font-serif text-[1.15rem] font-semibold text-foreground leading-snug">
+      <h3 className="font-serif text-lg font-semibold text-foreground leading-snug">
         {service.name}
       </h3>
 
-      {/* Description */}
-      <p className="text-[0.8125rem] leading-relaxed text-muted/80">
-        {service.description}
-      </p>
+      <p className="text-sm leading-relaxed text-muted/80">{service.description}</p>
     </motion.article>
   );
 }

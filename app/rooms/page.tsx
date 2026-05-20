@@ -138,7 +138,7 @@ export default function RoomsPage() {
                       </div>
                     </div>
 
-                    <!-- Description -->
+                    {/* Description */}
                     <p className="text-sm md:text-base text-muted leading-relaxed">
                       {room.fullDescription}
                     </p>

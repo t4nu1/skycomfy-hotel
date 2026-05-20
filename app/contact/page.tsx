@@ -234,7 +234,7 @@ export default function ContactPage() {
                             Send Booking Inquiry
                           </h3>
                           <p className="font-sans text-xs md:text-sm text-muted">
-                            Complete the fields below and we'll reply to your email or call you back directly within 1 hour.
+                            Complete the fields below and we&apos;ll reply to your email or call you back directly within 1 hour.
                           </p>
                         </div>
 

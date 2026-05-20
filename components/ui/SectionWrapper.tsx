@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
-import { fadeUpVariants, imageInVariants } from '@/lib/variants';
+import { imageInVariants } from '@/lib/variants';
 import type { Variants } from 'framer-motion';
 
 interface SectionWrapperProps {

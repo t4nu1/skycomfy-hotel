@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShieldCheck, HeartHandshake, Compass, Users } from 'lucide-react';
 import SectionWrapper from '@/components/ui/SectionWrapper';
@@ -83,7 +82,7 @@ export default function About() {
                 </h2>
                 <div className="w-16 h-1 bg-accent rounded-full" />
                 <p className="font-sans text-sm md:text-base text-muted leading-relaxed">
-                  Founded with the vision to elevate Kitale's travel experience, **SKYCOMFY HOTEL KITALE** has blossomed into one of the region’s premier destinations. Strategically positioned off the scenic Kitale-Kapenguria Highway, we provide a quiet, securely gated getaway for leisure, business, and celebrations.
+                  Founded with the vision to elevate Kitale&apos;s travel experience, **SKYCOMFY HOTEL KITALE** has blossomed into one of the region’s premier destinations. Strategically positioned off the scenic Kitale-Kapenguria Highway, we provide a quiet, securely gated getaway for leisure, business, and celebrations.
                 </p>
                 <p className="font-sans text-sm md:text-base text-muted leading-relaxed">
                   We believe that a great stay goes beyond a comfortable bed. It is defined by memorable moments—like an evening bonfire under the stars in our lush botanical gardens, a perfectly seasoned Kenyan dish prepared by our professional chefs, or a business summit that goes seamlessly thanks to our modern conference facilities.

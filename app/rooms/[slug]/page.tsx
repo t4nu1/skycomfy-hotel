@@ -5,10 +5,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Calendar, Users, Calculator, ArrowLeft, Heart, Sparkles, MessageCircle } from 'lucide-react';
+import { Check, Calendar, Users, Calculator, ArrowLeft, Sparkles, MessageCircle } from 'lucide-react';
 import { rooms } from '@/constants/rooms';
 import PageFadeIn from '@/components/ui/PageFadeIn';
-import SectionWrapper from '@/components/ui/SectionWrapper';
 
 const WHATSAPP_NUMBER = '254747118328';
 
