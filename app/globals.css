@@ -9,14 +9,14 @@
   /* ----------------------------------------------------------
      Colors
      ---------------------------------------------------------- */
-  --color-primary:       #1a2744;   /* Deep navy — main brand colour */
-  --color-accent:        #c9a84c;   /* Warm gold — CTAs, highlights, active states */
-  --color-background:    #faf8f4;   /* Warm cream — page background */
+  --color-primary:       #2c2c2c;   /* Deep charcoal — main brand colour */
+  --color-accent:        #c9a84c;   /* Muted gold — CTAs, highlights, active states */
+  --color-background:    #f5f0e6;   /* Warm ivory — page background */
   --color-surface:       #ffffff;   /* Card/panel backgrounds */
   --color-foreground:    #1a1a1a;   /* Primary text */
   --color-muted:         #6b7280;   /* Secondary text, captions */
   --color-border:        #e5e0d8;   /* Subtle borders */
-  --color-primary-light: #243460;   /* Hover state for primary */
+  --color-primary-light: #444444;   /* Hover state for primary */
   --color-accent-light:  #d4b46a;   /* Hover state for accent */
 
   /* ----------------------------------------------------------
