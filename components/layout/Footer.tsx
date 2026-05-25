@@ -185,12 +185,19 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-white/[0.08]">
-        <div className="mx-auto max-w-7xl px-5 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="mx-auto max-w-7xl px-5 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[11px] text-white/35">
             &copy; {year} SKYCOMFY HOTEL KITALE. All rights reserved.
           </p>
           <p className="text-[11px] text-white/25">
             Kitale, Trans-Nzoia County, Kenya
+          </p>
+          {/* Designer signature — elegant and subtle */}
+          <p className="text-[10px] text-white/20 font-sans tracking-[0.15em] hover:text-white/40 transition-colors duration-500 cursor-default select-none">
+            Created &amp; Designed by{' '}
+            <span className="text-accent/40 hover:text-accent/70 transition-colors duration-500 font-medium">
+              t4nu1
+            </span>
           </p>
         </div>
       </div>
