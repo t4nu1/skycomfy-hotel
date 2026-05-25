@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import Footer from '@/components/layout/Footer';
 
 // Mock next/link since we're in a jsdom environment

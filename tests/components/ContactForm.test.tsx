@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ContactForm from '@/components/contact/ContactForm';
 
@@ -64,17 +64,17 @@ describe('ContactForm', () => {
 
   // ── Validation errors on empty submit ────────────────────────────────────
 
-  it('shows validation errors for all required fields when submitting empty form', async () => {
+  it('shows validation errors for all required fields when submitting empty form', () => {
     render(<ContactForm />);
 
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
 
-    expect(await screen.findByText(/please enter your full name/i)).toBeInTheDocument();
+    expect(screen.getByText(/please enter your full name/i)).toBeInTheDocument();
     expect(screen.getByText(/please enter your email address/i)).toBeInTheDocument();
     expect(screen.getByText(/please type a short message/i)).toBeInTheDocument();
   });
 
-  it('shows invalid email error when email format is wrong', async () => {
+  it('shows invalid email error when email format is wrong', () => {
     render(<ContactForm />);
 
     fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Jane Doe' } });
@@ -83,10 +83,10 @@ describe('ContactForm', () => {
 
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
 
-    expect(await screen.findByText(/please enter a valid email address/i)).toBeInTheDocument();
+    expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
   });
 
-  it('shows message length error when message is fewer than 10 characters', async () => {
+  it('shows message length error when message is fewer than 10 characters', () => {
     render(<ContactForm />);
 
     fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Jane Doe' } });
@@ -95,28 +95,26 @@ describe('ContactForm', () => {
 
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
 
-    expect(await screen.findByText(/at least 10 characters/i)).toBeInTheDocument();
+    expect(screen.getByText(/at least 10 characters/i)).toBeInTheDocument();
   });
 
   // ── Error clears when user types ─────────────────────────────────────────
 
-  it('clears the name error when the user starts typing in the name field', async () => {
+  it('clears the name error when the user starts typing in the name field', () => {
     render(<ContactForm />);
 
-    // Trigger validation errors
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
-    expect(await screen.findByText(/please enter your full name/i)).toBeInTheDocument();
+    expect(screen.getByText(/please enter your full name/i)).toBeInTheDocument();
 
-    // Type in the name field — error should disappear
     fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'J' } });
     expect(screen.queryByText(/please enter your full name/i)).not.toBeInTheDocument();
   });
 
-  it('clears the email error when the user starts typing in the email field', async () => {
+  it('clears the email error when the user starts typing in the email field', () => {
     render(<ContactForm />);
 
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
-    expect(await screen.findByText(/please enter your email address/i)).toBeInTheDocument();
+    expect(screen.getByText(/please enter your email address/i)).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'a' } });
     expect(screen.queryByText(/please enter your email address/i)).not.toBeInTheDocument();
@@ -133,10 +131,12 @@ describe('ContactForm', () => {
 
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
 
-    // Advance the simulated 1-second API delay
-    vi.advanceTimersByTime(1000);
+    // Advance the simulated 1-second API delay and flush all pending state updates
+    await act(async () => {
+      vi.advanceTimersByTime(1500);
+    });
 
-    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText(/delivery successful/i)).toBeInTheDocument();
   });
 
@@ -151,8 +151,10 @@ describe('ContactForm', () => {
 
     fireEvent.submit(screen.getByRole('form', { hidden: true }) ?? screen.getByLabelText(/contact and booking inquiry form/i));
 
-    vi.advanceTimersByTime(1000);
+    await act(async () => {
+      vi.advanceTimersByTime(1500);
+    });
 
-    expect(await screen.findByText(/thank you, bob johnson/i)).toBeInTheDocument();
+    expect(screen.getByText(/thank you, bob johnson/i)).toBeInTheDocument();
   });
 });

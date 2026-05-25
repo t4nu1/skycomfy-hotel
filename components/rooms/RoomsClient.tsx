@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Check, ArrowRight, MessageCircle } from 'lucide-react';
 import { rooms } from '@/constants/rooms';
 import Lightbox from '@/components/gallery/Lightbox';
@@ -33,7 +32,6 @@ function RoomRow({
   index: number;
   onImageClick: (roomId: string, imageIndex: number) => void;
 }) {
-  const prefersReducedMotion = useReducedMotion();
   const isEven = index % 2 === 0;
 
   return (

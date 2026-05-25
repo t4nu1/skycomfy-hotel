@@ -3,11 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Phone } from 'lucide-react';
 
 /* Real SKYCOMFY HOTEL KITALE photo — exterior/building shot used as cinematic hero */
 const HERO_IMG = '/images/hero/hero-main.jpg';
-const WHATSAPP = 'https://wa.me/254747118328';
 
 /* ─── Framer Motion variants ─── */
 const containerVariants = {

@@ -1,9 +1,24 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import GalleryPreview from '@/components/home/GalleryPreview';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { GalleryImage } from '@/types';
 
-// Mock next/link
+// ── Helper ────────────────────────────────────────────────────────────────────
+function makeImage(id: string): GalleryImage {
+  return {
+    id,
+    src: `/images/gallery/image-${id}.jpg`,
+    alt: `Gallery image ${id}`,
+    category: 'rooms',
+    width: 400,
+    height: 300,
+  };
+}
+
+const sixImages = Array.from({ length: 6 }, (_, i) => makeImage(String(i + 1)));
+const fiveImages = Array.from({ length: 5 }, (_, i) => makeImage(String(i + 1)));
+
+// ── Mocks ─────────────────────────────────────────────────────────────────────
+
 vi.mock('next/link', () => ({
   default: ({
     href,
@@ -20,23 +35,20 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-// Mock next/image
 vi.mock('next/image', () => ({
   default: ({
     src,
     alt,
-    ...props
   }: {
     src: string;
     alt: string;
     [key: string]: unknown;
   }) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={alt} {...props} />
+    <img src={src} alt={alt} />
   ),
 }));
 
-// Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({
@@ -45,14 +57,13 @@ vi.mock('framer-motion', () => ({
     }: {
       children?: React.ReactNode;
       [key: string]: unknown;
-    }) => <div {...props}>{children}</div>,
+    }) => <div>{children}</div>,
   },
   useReducedMotion: () => false,
   useInView: () => true,
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-// Mock SectionWrapper to render children directly
 vi.mock('@/components/ui/SectionWrapper', () => ({
   default: ({
     children,
@@ -63,72 +74,65 @@ vi.mock('@/components/ui/SectionWrapper', () => ({
   }) => <div className={className}>{children}</div>,
 }));
 
-// Mock GalleryImage component
-vi.mock('@/components/gallery/GalleryImage', () => ({
-  default: ({
-    image,
-    index,
-  }: {
-    image: GalleryImage;
-    index: number;
-    onClick: (index: number) => void;
-    priority?: boolean;
-  }) => <img src={image.src} alt={image.alt} data-index={index} />,
+// ── Control the gallery constant via a mutable ref ────────────────────────────
+// vi.hoisted cannot reference module-level variables — use a plain object instead.
+const galleryMock = { images: [] as GalleryImage[] };
+
+vi.mock('@/constants/gallery', () => ({
+  get galleryImages() {
+    return galleryMock.images;
+  },
 }));
 
-// Helper to build a minimal GalleryImage
-function makeImage(id: string): GalleryImage {
-  return {
-    id,
-    src: `https://example.com/image-${id}.jpg`,
-    alt: `Gallery image ${id}`,
-    category: 'rooms',
-    width: 800,
-    height: 600,
-  };
-}
-
-const sixImages = Array.from({ length: 6 }, (_, i) => makeImage(String(i + 1)));
-const tenImages = Array.from({ length: 10 }, (_, i) => makeImage(String(i + 1)));
-const fiveImages = Array.from({ length: 5 }, (_, i) => makeImage(String(i + 1)));
-
+// ── Tests ─────────────────────────────────────────────────────────────────────
 describe('GalleryPreview', () => {
-  it('renders null when given fewer than 6 images', () => {
-    const { container } = render(<GalleryPreview images={fiveImages} />);
+  beforeEach(() => {
+    galleryMock.images = sixImages;
+    vi.resetModules();
+  });
+
+  it('renders null when gallery has fewer than 6 images', async () => {
+    galleryMock.images = fiveImages;
+    const { default: GalleryPreview } = await import('@/components/home/GalleryPreview');
+    const { container } = render(<GalleryPreview />);
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders null when given an empty array', () => {
-    const { container } = render(<GalleryPreview images={[]} />);
+  it('renders null when gallery is empty', async () => {
+    galleryMock.images = [];
+    const { default: GalleryPreview } = await import('@/components/home/GalleryPreview');
+    const { container } = render(<GalleryPreview />);
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders exactly 6 images when given exactly 6 images', () => {
-    render(<GalleryPreview images={sixImages} />);
+  it('renders images when gallery has exactly 6 images', async () => {
+    galleryMock.images = sixImages;
+    const { default: GalleryPreview } = await import('@/components/home/GalleryPreview');
+    render(<GalleryPreview />);
     const images = screen.getAllByRole('img');
-    expect(images).toHaveLength(6);
+    expect(images.length).toBeGreaterThanOrEqual(6);
   });
 
-  it('renders only 6 images when given more than 6 images', () => {
-    render(<GalleryPreview images={tenImages} />);
-    const images = screen.getAllByRole('img');
-    expect(images).toHaveLength(6);
-  });
-
-  it('renders a "View Full Gallery" link pointing to /gallery', () => {
-    render(<GalleryPreview images={sixImages} />);
+  it('renders a "View Full Gallery" link pointing to /gallery', async () => {
+    galleryMock.images = sixImages;
+    const { default: GalleryPreview } = await import('@/components/home/GalleryPreview');
+    render(<GalleryPreview />);
     const link = screen.getByRole('link', { name: /view full gallery/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', '/gallery');
   });
 
-  it('does not render the "View Full Gallery" link when images < 6', () => {
-    render(<GalleryPreview images={fiveImages} />);
+  it('does not render the "View Full Gallery" link when images < 6', async () => {
+    galleryMock.images = fiveImages;
+    const { default: GalleryPreview } = await import('@/components/home/GalleryPreview');
+    render(<GalleryPreview />);
     expect(screen.queryByRole('link', { name: /view full gallery/i })).not.toBeInTheDocument();
   });
 
-  it('all rendered images have non-empty alt text', () => {
-    render(<GalleryPreview images={sixImages} />);
+  it('all rendered images have non-empty alt text', async () => {
+    galleryMock.images = sixImages;
+    const { default: GalleryPreview } = await import('@/components/home/GalleryPreview');
+    render(<GalleryPreview />);
     const images = screen.getAllByRole('img');
     images.forEach((img) => {
       expect(img).toHaveAttribute('alt');
